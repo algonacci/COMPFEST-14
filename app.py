@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask
 
 app = Flask(__name__)
 
@@ -8,13 +8,5 @@ def index():
     return 'Hello World!'
 
 
-@app.route('/json')
-def json():
-    json = {
-        'message': 'Hello World!'
-    }
-    return jsonify(json)
-
-
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, host='0.0.0.0')
