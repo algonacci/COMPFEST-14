@@ -2,9 +2,11 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def index():
-  return 'Hello World!'
+    return 'Hello World!'
+
 
 @app.route('/json')
 def json():
@@ -13,5 +15,6 @@ def json():
     }
     return jsonify(json)
 
+
 if __name__ == '__main__':
-  app.run()
+    app.run()
