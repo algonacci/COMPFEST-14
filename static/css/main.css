@@ -5,3 +5,12 @@ body {
 nav {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
+
+df-messenger {
+  --df-messenger-bot-message: #0d6efd;
+  --df-messenger-button-titlebar-color: #0d6efd;
+  --df-messenger-chat-background-color: #e3f0ff;
+  --df-messenger-font-color: white;
+  --df-messenger-send-icon: #0d6efd;
+  --df-messenger-user-message: #20c997;
+}
