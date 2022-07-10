@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travens AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="icon" href="/static/img/travbot.png">
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-12 p-3">
+                <h3>Welcome to Travens AI</h3>
+                <div class="row">
+
+                    <div class="col-sm-4 py-3">
+                        <div class="card">
+                            <img src="/static/img/landmark-detection.png" class="card-img-top landmark-detection"
+                                alt="landmark-detection">
+                            <div class="card-body">
+                                <h5 class="card-title">Landmark Detection</h5>
+                                <p class="card-text">Looking for information about the destination's landmark in the
+                                    internet?</p>
+                                <div class="d-grid gap-2">
+                                    <a href="/question-generator" class="btn btn-primary">Detect the landmark!</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 py-3">
+                        <div class="card">
+                            <img src="/static/img/ticket_fare.png" alt="Ticket Fare Predictor">
+                            <div class="card-body">
+                                <h5 class="card-title">Ticket Fare Predictor</h5>
+                                <p class="card-text">Planning to go for vacation? Here's a tools to predict unstable
+                                    ticket fares.</p>
+                                <div class="d-grid gap-2">
+                                    <a href="/question-generator" class="btn btn-primary">Predict the flight fare!</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 py-3">
+                        <div class="card">
+                            <img src="/static/img/sentiment.png" alt="Sentiment Analysis">
+                            <div class="card-body">
+                                <h5 class="card-title">Market Sentiment Analysis</h5>
+                                <p class="card-text">A simple tools to do market research analysis to see what's going
+                                    on in the industry.</p>
+                                <div class="d-grid gap-2">
+                                    <a href="/question-generator" class="btn btn-primary">Check the sentiments!</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
