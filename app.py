@@ -22,7 +22,7 @@ def flight_fare_predictor_page():
 
 
 def rupiah_format(angka, with_prefix=False, desimal=2):
-    locale.setlocale(locale.LC_NUMERIC, 'IND')
+    locale.setlocale(locale.LC_NUMERIC, 'id_ID.utf8')
     rupiah = locale.format("%.*f", (desimal, angka), True)
     if with_prefix:
         return "Rp. {}".format(rupiah)
