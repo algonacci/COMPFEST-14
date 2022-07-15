@@ -7,8 +7,7 @@ import sklearn
 
 app = Flask(__name__)
 
-# model = pickle.load(open('models/flight-fare-predictor/random_forest_flight.pkl', 'rb'))
-model = pickle.load(open('random_forest_flight.pkl', 'rb'))
+model = pickle.load(open('models/flight-fare-predictor/random_forest_flight.pkl', 'rb'))
 
 @app.route('/')
 @cross_origin()
