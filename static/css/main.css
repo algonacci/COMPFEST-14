@@ -1,9 +1,28 @@
 body {
   background-color: #f5f5f5;
+  margin-top: 125px;
 }
 
 nav {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+#navbar {
+  background-color: #333;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: block;
+  transition: top 0.3s;
+  z-index: 1030;
+}
+
+#submitForm {
+  margin: auto;
+}
+
+.bi {
+  margin-right: 5px;
 }
 
 df-messenger {
