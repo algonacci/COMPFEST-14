@@ -21,3 +21,14 @@ window.onscroll = function () {
     }
     prevScrollpos = currentScrollPos;
 }
+
+// Button Loader
+$(document).ready(function() {
+    $("#submitForm").click(function() {
+        $(this).addClass("loader");
+
+        setTimeout(function() {
+            $("#submitForm").removeClass("loader");
+        }, 2000);
+    })
+});
