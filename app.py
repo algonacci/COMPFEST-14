@@ -36,5 +36,10 @@ def flight_fare_predictor():
                                predicted_price="Your Flight price is Rp{}".format(rupiah_format(output)))
 
 
+@app.route('/sentiment-analysis')
+@cross_origin()
+def sentiment_analysis_page():
+    return render_template('sentiment-analysis.html')
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
