@@ -38,6 +38,14 @@ def flight_fare_predictor():
 def sentiment_analysis_page():
     return render_template('sentiment-analysis.html')
 
+@app.route('/sentiment-analysis/topic', methods=['GET', 'POST'])
+@cross_origin()
+def topic_sentiment_analysis():
+    if request.method == 'POST':
+        pass
+    else:
+        return render_template('topic-sentiment-analysis.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

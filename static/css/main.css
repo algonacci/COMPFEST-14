@@ -63,3 +63,9 @@ df-messenger {
       transform: rotate(360deg);
   }
 }
+
+#banner {
+  width: 50%;
+  height: auto;
+  margin: auto;
+}
