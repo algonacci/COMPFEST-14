@@ -11,20 +11,50 @@
             <div class="col-lg-8 p-3">
                 <img src="/static/img/twitter_topic.png" alt="Twitter-Topic" width="100">
                 <h3>Topics</h3>
-                <p>Search any topic or hot issue related to tourism that happening right now and analyze the public sentiment.</p>
-                <form action="/attention_studio" method="POST">
+                <p>Search any topic or hot issue related to tourism that happening right now and analyze the public
+                    sentiment.</p>
+
+                <form id="#formTopic" action="/sentiment-analysis/topic" method="POST">
                     <div class="row justify-content-center text-center p-5">
                         <div class="col-lg-10">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Danau Toba, MotoGP Mandalika, or something else"
-                                    aria-label="Danau Toba, MotoGP Mandalika, or something else" aria-describedby="button-addon2">
-                                <button class="btn btn-primary" type="button"
-                                    id="button-addon2">Search</button>
+                                <input type="text" name="topic" class="form-control"
+                                    placeholder="Danau Toba, MotoGP Mandalika, or something else">
                             </div>
+                            <div class="row justify-content-center text-center">
+                                <div class="col-lg-6 mt-3 mb-3">
+                                    <input class="btn button mt-3" type="submit" value="Search" id="submitFormTopic">
+                                </div>
+                            </div>            
                         </div>
                     </div>
                 </form>
 
+            </div>
+
+            {% if text %}
+            <h3 class="p-3">Result for {{ text }}</h3>
+            {% endif %}
+
+            {% if wordcloud_plot %}
+            <div class="col-sm-6 py-3">
+                <img src="{{ wordcloud_plot }}.png" id="wordcloud" alt="WordCloud">
+            </div>
+            {% endif %}
+
+            {% if sentiment_countplot %}
+            <div class="col-sm-6 py-3">
+                <img src="{{ sentiment_countplot }}.png" id="wordcloud" alt="Sentiment-Countplot">
+            </div>
+            {% endif %}
+
+            <div class="table-responsive-sm p-3">
+
+                {% if no_topic %}
+                <h3>{{ no_topic }}</h3>
+                {% endif %}
+
+                {{ table | safe }}
             </div>
         </div>
     </div>

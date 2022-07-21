@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request
 from flask_cors import cross_origin
 import locale
-import utils
+import utils.flight_fare_predictor as predictor
+import utils.sentiment as sentiment
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -26,7 +27,7 @@ def rupiah_format(number, with_prefix=False, decimal=0):
 @cross_origin()
 def flight_fare_predictor():
     if request.method == 'POST':
-        output = utils.flight_fare_prediction(request=request)
+        output = predictor.flight_fare_prediction(request=request)
         return render_template('flight-fare-predictor.html',
                                predicted_price="Your flight price is Rp{}".format(rupiah_format(output)))
     else:
@@ -38,11 +39,28 @@ def flight_fare_predictor():
 def sentiment_analysis_page():
     return render_template('sentiment-analysis.html')
 
+
 @app.route('/sentiment-analysis/topic', methods=['GET', 'POST'])
 @cross_origin()
 def topic_sentiment_analysis():
     if request.method == 'POST':
-        pass
+        topic = request.form['topic']
+        if topic:
+            table = sentiment.scraping_tweets_with_any_topic(topic=topic)
+            cleaned_tweet = sentiment.scraping_tweets_with_any_topic.data_tweet
+            sentiment.visualize_wordcloud(cleaned_tweet)
+            wordcloud_plot = '../static/output/sentiment_analysis/topic/' + \
+                sentiment.visualize_wordcloud.wordcloud_visualization_filename
+            data_sentiment = sentiment.scraping_tweets_with_any_topic.df
+            sentiment.visualize_sentiment_countplot()
+            sentiment_countplot = '../static/output/sentiment_analysis/sentiment/' + \
+                sentiment.visualize_sentiment_countplot.sentiment_countplot_filename
+            return render_template('topic-sentiment-analysis.html',
+                                   table=table, text='{}'.format(topic),
+                                   wordcloud_plot=wordcloud_plot,
+                                   sentiment_countplot=sentiment_countplot)
+        else:
+            return render_template('topic-sentiment-analysis.html', no_topic="Please enter a topic")
     else:
         return render_template('topic-sentiment-analysis.html')
 
