@@ -1,6 +1,7 @@
 import pandas as pd
 import pickle
 
+
 model = pickle.load(
     open('models/flight-fare-predictor/random_forest_flight.pkl', 'rb'))
 
