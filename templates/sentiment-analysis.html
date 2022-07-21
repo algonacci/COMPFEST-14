@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% include 'includes/head.html' %}
+
+<body>
+    {% include 'includes/navbar.html' %}
+
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8 p-3">
+                <h3>Sentiment Analysis</h3>
+                <p>Choose the type of sentiment you want to analyze</p>
+                <div class="row text-center">
+
+                    <div class="col-sm-6 py-3">
+                        <div class="card">
+                            <img src="/static/img/twitter_topic.png" class="card-img-top" id="banner" alt="Twitter-Topic">
+                            <div class="card-body">
+                                <h5 class="card-title mt-3">Topics</h5>
+                                <p class="card-text">Analyze any topic or keyword related to tourism that happening now.</p>
+                                <div class="d-grid gap-2">
+                                    <a href="/sentiment-analysis/topic" class="btn btn-primary">Search any topic!</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 py-3">
+                        <div class="card">
+                            <img src="/static/img/twitter_account.png" class="card-img-top mt-3" id="banner" alt="Twitter-Account">
+                            <div class="card-body">
+                                <h5 class="card-title">Account</h5>
+                                <p class="card-text">Analyze the sentiment from an official account in the tourism industry.</p>
+                                <div class="d-grid gap-2">
+                                    <a href="/sentiment-analysis/account" class="btn btn-primary">Search any account!</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+
+    {% include 'includes/scripts.html' %}
+</body>
+
+</html>

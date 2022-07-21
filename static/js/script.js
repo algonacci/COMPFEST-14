@@ -21,3 +21,20 @@ window.onscroll = function () {
     }
     prevScrollpos = currentScrollPos;
 }
+
+// Submit and Display Button Loader
+$(document).ready(function() {
+    $("#submitFormFlight").click(function() {
+        $(this).addClass("loader");
+
+        setTimeout(function() {
+            $("#submitFormFlight").removeClass("loader");
+        }, 2000);
+
+        $.ajax({
+            url: "/flight-fare-predictor",
+            type: "POST",
+            data: $("#form").serialize(),
+        });
+    })
+});
