@@ -7,16 +7,11 @@ warnings.filterwarnings('ignore')
 
 app = Flask(__name__)
 
+
 @app.route('/')
 @cross_origin()
 def index():
     return render_template('index.html')
-
-
-@app.route('/flight-fare-predictor')
-@cross_origin()
-def flight_fare_predictor_page():
-    return render_template('flight-fare-predictor.html')
 
 
 def rupiah_format(number, with_prefix=False, decimal=0):
@@ -27,19 +22,22 @@ def rupiah_format(number, with_prefix=False, decimal=0):
     return rupiah
 
 
-@app.route('/flight-fare-prediction', methods=['GET', 'POST'])
+@app.route('/flight-fare-predictor', methods=['GET', 'POST'])
 @cross_origin()
 def flight_fare_predictor():
     if request.method == 'POST':
         output = utils.flight_fare_prediction(request=request)
         return render_template('flight-fare-predictor.html',
-                               predicted_price="Your Flight price is Rp{}".format(rupiah_format(output)))
+                               predicted_price="Your flight price is Rp{}".format(rupiah_format(output)))
+    else:
+        return render_template('flight-fare-predictor.html')
 
 
 @app.route('/sentiment-analysis')
 @cross_origin()
 def sentiment_analysis_page():
     return render_template('sentiment-analysis.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
