@@ -4,6 +4,7 @@ import locale
 import utils.flight_fare_predictor as predictor
 import utils.sentiment as sentiment
 import warnings
+import pandas as pd
 warnings.filterwarnings('ignore')
 
 app = Flask(__name__)
@@ -28,7 +29,18 @@ def rupiah_format(number, with_prefix=False, decimal=0):
 def flight_fare_predictor():
     if request.method == 'POST':
         output = predictor.flight_fare_prediction(request=request)
+        get_data = request.form.to_dict()
+        df = pd.DataFrame({
+            'Departure Time': get_data['Dep_Time'].replace('T', ' '),
+            'Arrival Time': get_data['Arrival_Time'].replace('T', ' '),
+            'Source': get_data['Source'],
+            'Destination': get_data['Destination'],
+            'Total Transit': get_data['stops'],
+            'Airline': get_data['airline']
+        }, index=[0])
+        table_data = df.to_html(index=False, classes='table table-hover')
         return render_template('flight-fare-predictor.html',
+                               predicted_data=table_data,
                                predicted_price="Your flight price is Rp{}".format(rupiah_format(output)))
     else:
         return render_template('flight-fare-predictor.html')

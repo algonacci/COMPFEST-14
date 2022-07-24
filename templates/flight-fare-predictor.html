@@ -93,6 +93,16 @@
                             </div>
                         </div>
                     </div>
+
+                    {% if predicted_data %}
+                    <div class="card-body">
+                        <div class="row px-3 justify-content-center text-center" id="tableFlight">
+                            <h3>Prediction Result</h3>
+                            {{ predicted_data | safe }}
+                        </div>
+                    </div>
+                    {% endif %}
+
                     <h5 class="card-header justify-content-center text-center p-3">{{ predicted_price }}</h5>
                 </div>
             </div>
