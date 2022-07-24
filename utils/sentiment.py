@@ -160,7 +160,7 @@ def scraping_tweets_with_any_topic(topic):
                        "Followers": followers,
                        "Retweets": retweets,
                        "Sentiment": temporary_df['sentiment'].apply(get_analysis),
-                       "Confidence": confidence, })
+                       "Confidence": confidence})
 
     scraping_tweets_with_any_topic.sentiment = df['Sentiment']
     scraping_tweets_with_any_topic.data_tweet = []
