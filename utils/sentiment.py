@@ -102,9 +102,9 @@ def tweet_cleaner(text):
     return (" ".join(words)).strip()
 
 
-def visualize_wordcloud(data):
+def visualize_wordcloud(data, topic):
     timestamp = time.strftime("%Y%m%d-%H%M%S")
-    visualize_wordcloud.wordcloud_visualization_filename = 'Topic_' + timestamp
+    visualize_wordcloud.wordcloud_visualization_filename = 'Topic_' + topic + '_' + timestamp
     text = str(data).replace("'", "")
     wordcloud = WordCloud(width=3000, height=2000,
                           font_path='C:\\Users\\Client\\Documents\\GitHub\\COMPFEST-14\\static\\font\\PlusJakartaSans-Regular.ttf',
@@ -118,11 +118,11 @@ def visualize_wordcloud(data):
                 visualize_wordcloud.wordcloud_visualization_filename + '.png')
 
 
-def visualize_sentiment_countplot():
+def visualize_sentiment_countplot(topic):
     timestamp = time.strftime("%Y%m%d-%H%M%S")
-    visualize_sentiment_countplot.sentiment_countplot_filename = 'Sentiment_' + timestamp
+    visualize_sentiment_countplot.sentiment_countplot_filename = 'Sentiment_' + topic + '_' + timestamp
     plt.figure(figsize=(15, 10), facecolor='k')
-    plt.title('Sentiment Analysis', fontsize=40, pad=20)
+    plt.title('Sentiment Analysis {}'.format(topic), fontsize=40, pad=20)
     plt.xlabel('Sentiment', fontsize=30, labelpad=20)
     plt.ylabel('Count', fontsize=30, labelpad=20)
 
