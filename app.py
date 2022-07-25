@@ -67,10 +67,14 @@ def topic_sentiment_analysis():
             sentiment.visualize_sentiment_countplot(topic=topic)
             sentiment_countplot = '../static/output/sentiment_analysis/topic_sentiment/' + \
                 sentiment.visualize_sentiment_countplot.sentiment_countplot_filename
+            sentiment.visualize_word_embedding(data=cleaned_tweet, topic=topic)
+            word_embedding = '../static/output/sentiment_analysis/word_embedding/' + \
+                sentiment.visualize_word_embedding.word_embedding_filename
             return render_template('topic-sentiment-analysis.html',
                                    table=table, text='{}'.format(topic),
                                    wordcloud_plot=wordcloud_plot,
-                                   sentiment_countplot=sentiment_countplot)
+                                   sentiment_countplot=sentiment_countplot,
+                                   word_embedding=word_embedding)
         else:
             return render_template('topic-sentiment-analysis.html', no_topic="Please enter a topic")
     else:
@@ -90,10 +94,14 @@ def user_sentiment_analysis():
             sentiment.visualize_sentiment_countplot_username(username=username)
             sentiment_countplot = '../static/output/sentiment_analysis/user_sentiment/' + \
                 sentiment.visualize_sentiment_countplot_username.sentiment_countplot_filename
+            sentiment.visualize_word_embedding(data=cleaned_tweet, topic=username)
+            word_embedding = '../static/output/sentiment_analysis/word_embedding/' + \
+                sentiment.visualize_word_embedding.word_embedding_filename
             return render_template('user-sentiment-analysis.html',
                                     table=table, text='{}'.format(username),
                                     wordcloud_plot=wordcloud_plot,
-                                    sentiment_countplot=sentiment_countplot)
+                                    sentiment_countplot=sentiment_countplot,
+                                    word_embedding=word_embedding)
         else:
             return render_template('topic-sentiment-analysis.html', no_topic="Please enter an username")
     else:

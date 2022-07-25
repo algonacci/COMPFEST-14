@@ -1,3 +1,7 @@
+import time
+import re
+from bs4 import BeautifulSoup
+from gensim.models import Word2Vec
 import tweepy
 from dotenv import dotenv_values
 from transformers import pipeline
@@ -6,11 +10,12 @@ from sklearn.preprocessing import LabelEncoder
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import seaborn as sns
+import nltk
 from nltk.tokenize import WordPunctTokenizer
 from nltk.corpus import stopwords
-from bs4 import BeautifulSoup
-import re
-import time
+from nltk.tokenize import word_tokenize
+nltk.download('punkt')
+import numpy as np
 
 plt.rcParams.update({
     "lines.color": "white",
@@ -117,9 +122,11 @@ def visualize_wordcloud(data, topic):
     plt.savefig(fname='static/output/sentiment_analysis/topic/' +
                 visualize_wordcloud.wordcloud_visualization_filename + '.png')
 
+
 def visualize_wordcloud_username(data, username):
     timestamp = time.strftime("%Y%m%d-%H%M%S")
-    visualize_wordcloud.wordcloud_visualization_filename = 'Username_' + username + '_' + timestamp
+    visualize_wordcloud.wordcloud_visualization_filename = 'Username_' + \
+        username + '_' + timestamp
     text = str(data).replace("'", "")
     wordcloud = WordCloud(width=3000, height=2000,
                           font_path='C:\\Users\\Client\\Documents\\GitHub\\COMPFEST-14\\static\\font\\PlusJakartaSans-Regular.ttf',
@@ -135,7 +142,8 @@ def visualize_wordcloud_username(data, username):
 
 def visualize_sentiment_countplot(topic):
     timestamp = time.strftime("%Y%m%d-%H%M%S")
-    visualize_sentiment_countplot.sentiment_countplot_filename = 'Sentiment_' + topic + '_' + timestamp
+    visualize_sentiment_countplot.sentiment_countplot_filename = 'Sentiment_' + \
+        topic + '_' + timestamp
     plt.figure(figsize=(15, 10), facecolor='k')
     plt.title('Sentiment Analysis {}'.format(topic), fontsize=40, pad=20)
     plt.xlabel('Sentiment', fontsize=30, labelpad=20)
@@ -148,12 +156,14 @@ def visualize_sentiment_countplot(topic):
     plt.savefig(fname='static/output/sentiment_analysis/topic_sentiment/' +
                 visualize_sentiment_countplot.sentiment_countplot_filename + '.png')
 
+
 def visualize_sentiment_countplot_username(username):
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     visualize_sentiment_countplot_username.sentiment_countplot_filename = 'Sentiment_Username_' \
-         + username + '_' + timestamp
+        + username + '_' + timestamp
     plt.figure(figsize=(15, 10), facecolor='k')
-    plt.title('Sentiment Analysis from {}'.format(username), fontsize=40, pad=20)
+    plt.title('Sentiment Analysis from {}'.format(
+        username), fontsize=40, pad=20)
     plt.xlabel('Sentiment', fontsize=30, labelpad=20)
     plt.ylabel('Count', fontsize=30, labelpad=20)
 
@@ -209,7 +219,8 @@ def scraping_tweets_with_any_topic(topic):
 def scraping_tweets_from_user_account(username):
     list_of_tweets = []
 
-    tweets = api.user_timeline(screen_name=username, count=100, tweet_mode='extended')
+    tweets = api.user_timeline(
+        screen_name=username, count=60, tweet_mode='extended')
 
     for tweet in tweets:
         list_of_tweets.append(tweet.full_text)
@@ -241,3 +252,36 @@ def scraping_tweets_from_user_account(username):
     df = df.to_html(index=False, classes='table table-hover')
 
     return df
+
+
+def visualize_word_embedding(data, topic):
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    visualize_word_embedding.word_embedding_filename = 'Word_Embedding_' + \
+        topic + '_' + timestamp
+    df = pd.DataFrame({
+        'cleaned_tweet': data,
+    })
+    sentences = [word_tokenize(sent) for sent in df['cleaned_tweet']]
+    print(sentences[:5])
+    model = Word2Vec(sentences, size=100, window=5,
+                     min_count=1, workers=4, seed=42,)
+    words = list(model.wv.vocab)
+    X = model[words]
+    new_df = pd.DataFrame(X)
+    X_corr = new_df.corr()
+    values, vectors = np.linalg.eig(X_corr)
+    args = (-values).argsort()
+    values = vectors[args]
+    vectors = vectors[:, args]
+    new_vectors = vectors[:,:2]
+    new_X = np.dot(X, new_vectors)
+
+    plt.figure(figsize=(15, 10), facecolor='k')
+    plt.scatter(new_X[:, 0], new_X[:, 1], s=100)
+    plt.axis('off')
+    vocab = list(model.wv.vocab)
+    for i, word in enumerate(vocab):
+        plt.annotate(word, xy=(new_X[i,0] ,new_X[i,1]))
+    plt.savefig(fname='static/output/sentiment_analysis/word_embedding/' +
+                visualize_word_embedding.word_embedding_filename + '.png')
+

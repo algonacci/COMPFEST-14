@@ -48,6 +48,12 @@
             </div>
             {% endif %}
 
+            {% if word_embedding %}
+            <div class="col-sm-6 py-3">
+                <img src="{{ word_embedding }}.png" id="wordcloud" alt="Sentiment-Countplot">
+            </div>
+            {% endif %}
+
             <div class="table-responsive-sm p-3">
 
                 {% if no_topic %}
