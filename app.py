@@ -76,6 +76,13 @@ def topic_sentiment_analysis():
     else:
         return render_template('topic-sentiment-analysis.html')
 
+@app.route('/sentiment-analysis/user', methods=['GET', 'POST'])
+@cross_origin()
+def user_sentiment_analysis():
+    if request.method == 'POST':
+        pass
+    else:
+        return render_template('user-sentiment-analysis.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
