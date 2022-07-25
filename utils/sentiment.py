@@ -18,6 +18,8 @@ nltk.download('punkt')
 import numpy as np
 import warnings
 warnings.filterwarnings('ignore')
+from xlwt import Workbook
+from PIL import Image
 
 plt.rcParams.update({
     "lines.color": "white",
@@ -213,6 +215,15 @@ def scraping_tweets_with_any_topic(topic):
     for data in df['Tweet']:
         scraping_tweets_with_any_topic.data_tweet.append(tweet_cleaner(data))
 
+    df_for_excel = df.copy()
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    scraping_tweets_with_any_topic.df_excel = df_for_excel.to_excel(
+        'static/output/sentiment_analysis/excel/' + topic + '_' + timestamp + '.xlsx',
+        index=False
+    )
+    scraping_tweets_with_any_topic.path_excel = 'static/output/sentiment_analysis/excel/' \
+        + topic + '_' + timestamp + '.xlsx'
+
     scraping_tweets_with_any_topic.df = df.to_html(
         index=False, classes='table table-hover')
     return scraping_tweets_with_any_topic.df
@@ -251,8 +262,16 @@ def scraping_tweets_from_user_account(username):
     scraping_tweets_from_user_account.sentiment = df['Sentiment']
     scraping_tweets_from_user_account.data_tweet = df['Tweet']
 
-    df = df.to_html(index=False, classes='table table-hover')
+    df_for_excel = df.copy()
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    scraping_tweets_from_user_account.df_excel = df_for_excel.to_excel(
+        'static/output/sentiment_analysis/excel/' + username + '_' + timestamp + '.xlsx',
+        index=False)
+    scraping_tweets_from_user_account.path_excel = 'static/output/sentiment_analysis/excel/' \
+         + username + '_' + timestamp + '.xlsx'
 
+    df = df.to_html(index=False, classes='table table-hover')
+    
     return df
 
 
@@ -286,4 +305,3 @@ def visualize_word_embedding(data, topic):
         plt.annotate(word, xy=(new_X[i,0] ,new_X[i,1]))
     plt.savefig(fname='static/output/sentiment_analysis/word_embedding/' +
                 visualize_word_embedding.word_embedding_filename + '.png')
-

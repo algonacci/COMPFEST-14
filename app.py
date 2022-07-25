@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 from flask_cors import cross_origin
 import locale
 import utils.flight_fare_predictor as predictor
@@ -106,6 +106,19 @@ def user_sentiment_analysis():
             return render_template('topic-sentiment-analysis.html', no_topic="Please enter an username")
     else:
         return render_template('user-sentiment-analysis.html')
+
+
+@app.route('/download_excel_user')
+def download_excel_user():
+    excel = sentiment.scraping_tweets_from_user_account.path_excel
+    return send_file(excel, as_attachment=True)
+
+    
+@app.route('/download_excel_topic')
+def download_excel_topic():
+    excel = sentiment.scraping_tweets_with_any_topic.path_excel
+    return send_file(excel, as_attachment=True)
+
 
 @app.errorhandler(404)
 @cross_origin()
