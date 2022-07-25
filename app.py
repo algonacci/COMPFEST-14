@@ -107,5 +107,10 @@ def user_sentiment_analysis():
     else:
         return render_template('user-sentiment-analysis.html')
 
+@app.errorhandler(404)
+@cross_origin()
+def not_found(error):
+    return render_template('404.html'), 404
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
