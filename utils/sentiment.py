@@ -117,6 +117,21 @@ def visualize_wordcloud(data, topic):
     plt.savefig(fname='static/output/sentiment_analysis/topic/' +
                 visualize_wordcloud.wordcloud_visualization_filename + '.png')
 
+def visualize_wordcloud_username(data, username):
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    visualize_wordcloud.wordcloud_visualization_filename = 'Username_' + username + '_' + timestamp
+    text = str(data).replace("'", "")
+    wordcloud = WordCloud(width=3000, height=2000,
+                          font_path='C:\\Users\\Client\\Documents\\GitHub\\COMPFEST-14\\static\\font\\PlusJakartaSans-Regular.ttf',
+                          max_words=200, colormap='Set3',
+                          background_color="black",
+                          stopwords=stop_words).generate(text)
+    plt.figure(figsize=(15, 10), facecolor='k')
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis("off")
+    plt.savefig(fname='static/output/sentiment_analysis/username/' +
+                visualize_wordcloud.wordcloud_visualization_filename + '.png')
+
 
 def visualize_sentiment_countplot(topic):
     timestamp = time.strftime("%Y%m%d-%H%M%S")
@@ -130,8 +145,24 @@ def visualize_sentiment_countplot(topic):
     sns.countplot(x=scraping_tweets_with_any_topic.sentiment,
                   data=scraping_tweets_with_any_topic.sentiment)
 
-    plt.savefig(fname='static/output/sentiment_analysis/sentiment/' +
+    plt.savefig(fname='static/output/sentiment_analysis/topic_sentiment/' +
                 visualize_sentiment_countplot.sentiment_countplot_filename + '.png')
+
+def visualize_sentiment_countplot_username(username):
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    visualize_sentiment_countplot_username.sentiment_countplot_filename = 'Sentiment_Username_' \
+         + username + '_' + timestamp
+    plt.figure(figsize=(15, 10), facecolor='k')
+    plt.title('Sentiment Analysis from {}'.format(username), fontsize=40, pad=20)
+    plt.xlabel('Sentiment', fontsize=30, labelpad=20)
+    plt.ylabel('Count', fontsize=30, labelpad=20)
+
+    # make a count plot using matplotlib
+    sns.countplot(x=scraping_tweets_from_user_account.sentiment,
+                  data=scraping_tweets_from_user_account.sentiment)
+
+    plt.savefig(fname='static/output/sentiment_analysis/user_sentiment/' +
+                visualize_sentiment_countplot_username.sentiment_countplot_filename + '.png')
 
 
 def scraping_tweets_with_any_topic(topic):
@@ -147,6 +178,8 @@ def scraping_tweets_with_any_topic(topic):
         likes.append(tweet.favorite_count)
         followers.append(tweet.user.followers_count)
         retweets.append(tweet.retweet_count)
+
+    print(tweets)
 
     predicted_label, confidence = analyze_sentiment(tweets)
 
@@ -171,3 +204,40 @@ def scraping_tweets_with_any_topic(topic):
     scraping_tweets_with_any_topic.df = df.to_html(
         index=False, classes='table table-hover')
     return scraping_tweets_with_any_topic.df
+
+
+def scraping_tweets_from_user_account(username):
+    list_of_tweets = []
+
+    tweets = api.user_timeline(screen_name=username, count=100, tweet_mode='extended')
+
+    for tweet in tweets:
+        list_of_tweets.append(tweet.full_text)
+
+    cleaned_tweet = []
+
+    for data in list_of_tweets:
+        cleaned_tweet.append(tweet_cleaner(data))
+
+    print(cleaned_tweet)
+
+    predicted_label, confidence = analyze_sentiment(cleaned_tweet)
+
+    temporary_df = pd.DataFrame({
+        'sentiment': le.fit_transform(predicted_label),
+    })
+
+    df = pd.DataFrame({
+        "Tweet": cleaned_tweet,
+        "Retweets": [tweet.retweet_count for tweet in tweets],
+        "Likes": [tweet.favorite_count for tweet in tweets],
+        "Sentiment": temporary_df['sentiment'].apply(get_analysis),
+        "Confidence": confidence
+    })
+
+    scraping_tweets_from_user_account.sentiment = df['Sentiment']
+    scraping_tweets_from_user_account.data_tweet = df['Tweet']
+
+    df = df.to_html(index=False, classes='table table-hover')
+
+    return df

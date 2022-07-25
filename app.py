@@ -65,7 +65,7 @@ def topic_sentiment_analysis():
                 sentiment.visualize_wordcloud.wordcloud_visualization_filename
             data_sentiment = sentiment.scraping_tweets_with_any_topic.df
             sentiment.visualize_sentiment_countplot(topic=topic)
-            sentiment_countplot = '../static/output/sentiment_analysis/sentiment/' + \
+            sentiment_countplot = '../static/output/sentiment_analysis/topic_sentiment/' + \
                 sentiment.visualize_sentiment_countplot.sentiment_countplot_filename
             return render_template('topic-sentiment-analysis.html',
                                    table=table, text='{}'.format(topic),
@@ -80,7 +80,22 @@ def topic_sentiment_analysis():
 @cross_origin()
 def user_sentiment_analysis():
     if request.method == 'POST':
-        pass
+        username = request.form['username']
+        if username:
+            table = sentiment.scraping_tweets_from_user_account(username=username)
+            cleaned_tweet = sentiment.scraping_tweets_from_user_account.data_tweet
+            sentiment.visualize_wordcloud_username(data=cleaned_tweet, username=username)
+            wordcloud_plot = '../static/output/sentiment_analysis/username/' + \
+                sentiment.visualize_wordcloud.wordcloud_visualization_filename
+            sentiment.visualize_sentiment_countplot_username(username=username)
+            sentiment_countplot = '../static/output/sentiment_analysis/user_sentiment/' + \
+                sentiment.visualize_sentiment_countplot_username.sentiment_countplot_filename
+            return render_template('user-sentiment-analysis.html',
+                                    table=table, text='{}'.format(username),
+                                    wordcloud_plot=wordcloud_plot,
+                                    sentiment_countplot=sentiment_countplot)
+        else:
+            return render_template('topic-sentiment-analysis.html', no_topic="Please enter an username")
     else:
         return render_template('user-sentiment-analysis.html')
 
