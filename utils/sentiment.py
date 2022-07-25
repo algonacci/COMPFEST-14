@@ -218,7 +218,8 @@ def scraping_tweets_with_any_topic(topic):
     df_for_excel = df.copy()
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     scraping_tweets_with_any_topic.df_excel = df_for_excel.to_excel(
-        'static/output/sentiment_analysis/excel/' + topic + '_' + timestamp + '.xlsx'
+        'static/output/sentiment_analysis/excel/' + topic + '_' + timestamp + '.xlsx',
+        index=False
     )
     scraping_tweets_with_any_topic.path_excel = 'static/output/sentiment_analysis/excel/' \
         + topic + '_' + timestamp + '.xlsx'
