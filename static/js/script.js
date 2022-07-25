@@ -52,6 +52,21 @@ $(document).ready(function () {
       type: "POST",
       data: $("#formTopic").serialize(),
     });
-    console.log(data)
+  });
+});
+
+$(document).ready(function () {
+  $("#submitFormUser").click(function () {
+    $(this).addClass("loader");
+
+    setTimeout(function () {
+      $("#submitFormUser").removeClass("loader");
+    }, 60000);
+
+    $.ajax({
+      url: "/sentiment-analysis/user",
+      type: "POST",
+      data: $("#formUser").serialize(),
+    });
   });
 });

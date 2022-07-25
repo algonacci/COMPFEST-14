@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% include 'includes/head.html' %}
+
+<style>
+    .empty-4-6 .main-img {
+        object-fit: cover;
+        object-position: center;
+        margin-bottom: 0.5rem;
+        width: 83.333333%;
+    }
+
+    .empty-4-6 .title-text {
+        color: #272E35;
+        margin-bottom: 1.25rem;
+    }
+
+    .empty-4-6 .title-caption {
+        color: #9C9C9C;
+        letter-spacing: 0.025em;
+        line-height: 1.75rem;
+    }
+
+    .empty-4-6 .btn-back {
+        background-color: #0d6efd;
+        padding: 1rem 1.5rem;
+        border-radius: 0.75rem;
+    }
+
+    .empty-4-6 .btn-back:hover {
+        --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    }
+
+    @media(min-width: 425px) {
+        .empty-4-6 .title-text {
+            font-size: 40px;
+        }
+    }
+
+    @media (min-width: 576px) {
+        .empty-4-6 {
+            padding: 3.5rem 2rem 4rem;
+        }
+
+        .empty-4-6 .main-img {
+            margin-bottom: 0.625rem;
+            width: auto;
+        }
+    }
+</style>
+
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+    <div class="empty-4-6 container mx-auto d-flex align-items-center justify-content-center flex-column">
+        <img class="main-img img-fluid"
+            src="http://api.elements.buildwithangga.com/storage/files/2/assets/Empty%20State/EmptyState4/Empty-4-2.png"
+            alt=""
+            height="250px"
+            width="100px">
+
+        <div class="text-center">
+            <h1 class="title-text">
+                Opss! Something Missing
+            </h1>
+            <p class="title-caption">
+                The page you’re looking for isn’t found. We<br class="d-sm-block d-none"> suggest you Back to Homepage.
+            </p>
+            <div class="d-flex justify-content-center">
+                <a href="/" class="btn mb-3 btn-back d-inline-flex text-white">
+                    Back to Homepage
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+
+    {% include 'includes/scripts.html' %}
+
+</body>
+
+</html>
