@@ -70,3 +70,9 @@ $(document).ready(function () {
     });
   });
 });
+
+// Upload image and show preview
+var loadFile = function (event) {
+  var output = document.getElementById("output");
+  output.src = URL.createObjectURL(event.target.files[0]);
+};
