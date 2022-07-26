@@ -63,7 +63,6 @@ def topic_sentiment_analysis():
             sentiment.visualize_wordcloud(data=cleaned_tweet, topic=topic)
             wordcloud_plot = '../static/output/sentiment_analysis/topic/' + \
                 sentiment.visualize_wordcloud.wordcloud_visualization_filename
-            data_sentiment = sentiment.scraping_tweets_with_any_topic.df
             sentiment.visualize_sentiment_countplot(topic=topic)
             sentiment_countplot = '../static/output/sentiment_analysis/topic_sentiment/' + \
                 sentiment.visualize_sentiment_countplot.sentiment_countplot_filename
