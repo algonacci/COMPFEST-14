@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% include 'includes/head.html' %}
+
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+    <div class="container pt-5 mt-5">
+        <div class="row">
+            <div class="col-lg-12 d-flex justify-content-center mt-3">
+                <img src="/static/img/logo-object-detection.png" alt="Landmark Detection" width="200">
+            </div>
+            <div class="col-lg-12 d-flex justify-content-center mt-3">
+                <h1>Landmark Detection</h1>
+            </div>
+            <div class="col-lg-12 justify-content-center d-flex">
+                <div>
+                    <label for="formFile" class="form-label"></label>
+                    <input class="form-control" type="file" id="formFile">
+                </div>
+            </div>
+            <img id="output" alt="" width="40%" height="40%" />
+            <div class="col-lg-12 d-flex justify-content-center mt-3">
+                <button class="btn btn-primary p-5">Predict!</button>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+
+    {% include 'includes/scripts.html' %}
+
+</body>
+
+</html>

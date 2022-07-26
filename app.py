@@ -80,28 +80,32 @@ def topic_sentiment_analysis():
     else:
         return render_template('topic-sentiment-analysis.html')
 
+
 @app.route('/sentiment-analysis/user', methods=['GET', 'POST'])
 @cross_origin()
 def user_sentiment_analysis():
     if request.method == 'POST':
         username = request.form['username']
         if username:
-            table = sentiment.scraping_tweets_from_user_account(username=username)
+            table = sentiment.scraping_tweets_from_user_account(
+                username=username)
             cleaned_tweet = sentiment.scraping_tweets_from_user_account.data_tweet
-            sentiment.visualize_wordcloud_username(data=cleaned_tweet, username=username)
+            sentiment.visualize_wordcloud_username(
+                data=cleaned_tweet, username=username)
             wordcloud_plot = '../static/output/sentiment_analysis/username/' + \
                 sentiment.visualize_wordcloud.wordcloud_visualization_filename
             sentiment.visualize_sentiment_countplot_username(username=username)
             sentiment_countplot = '../static/output/sentiment_analysis/user_sentiment/' + \
                 sentiment.visualize_sentiment_countplot_username.sentiment_countplot_filename
-            sentiment.visualize_word_embedding(data=cleaned_tweet, topic=username)
+            sentiment.visualize_word_embedding(
+                data=cleaned_tweet, topic=username)
             word_embedding = '../static/output/sentiment_analysis/word_embedding/' + \
                 sentiment.visualize_word_embedding.word_embedding_filename
             return render_template('user-sentiment-analysis.html',
-                                    table=table, text='{}'.format(username),
-                                    wordcloud_plot=wordcloud_plot,
-                                    sentiment_countplot=sentiment_countplot,
-                                    word_embedding=word_embedding)
+                                   table=table, text='{}'.format(username),
+                                   wordcloud_plot=wordcloud_plot,
+                                   sentiment_countplot=sentiment_countplot,
+                                   word_embedding=word_embedding)
         else:
             return render_template('topic-sentiment-analysis.html', no_topic="Please enter an username")
     else:
@@ -109,21 +113,32 @@ def user_sentiment_analysis():
 
 
 @app.route('/download_excel_user')
+@cross_origin()
 def download_excel_user():
     excel = sentiment.scraping_tweets_from_user_account.path_excel
     return send_file(excel, as_attachment=True)
 
-    
+
 @app.route('/download_excel_topic')
+@cross_origin()
 def download_excel_topic():
     excel = sentiment.scraping_tweets_with_any_topic.path_excel
     return send_file(excel, as_attachment=True)
 
 
+@app.route('/landmark-detection', methods=['GET', 'POST'])
+@cross_origin()
+def landmark_detection():
+    if request.method == 'POST':
+        pass
+    else:
+        return render_template('landmark-detection.html')
+
 @app.errorhandler(404)
 @cross_origin()
 def not_found(error):
     return render_template('404.html'), 404
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
