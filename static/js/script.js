@@ -76,3 +76,13 @@ var loadFile = function (event) {
   var output = document.getElementById("output");
   output.src = URL.createObjectURL(event.target.files[0]);
 };
+
+$(document).ready(function () {
+  $("#submitLandmarkDetection").click(function () {
+    $(this).addClass("loader");
+
+    setTimeout(function () {
+      $("#submitLandmarkDetection").removeClass("loader");
+    }, 60000);
+  });
+});

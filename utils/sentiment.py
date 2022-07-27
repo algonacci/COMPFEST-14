@@ -18,8 +18,6 @@ nltk.download('punkt')
 import numpy as np
 import warnings
 warnings.filterwarnings('ignore')
-from xlwt import Workbook
-from PIL import Image
 
 plt.rcParams.update({
     "lines.color": "white",
