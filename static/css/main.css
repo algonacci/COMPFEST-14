@@ -25,6 +25,10 @@ nav {
   margin: auto;
 }
 
+#submitLandmarkDetection {
+  margin: auto;
+}
+
 .bi {
   margin-right: 5px;
 }

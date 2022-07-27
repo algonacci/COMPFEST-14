@@ -1,13 +1,25 @@
+import os
 from flask import Flask, render_template, request, send_file
 from flask_cors import cross_origin
+from werkzeug.utils import secure_filename
 import locale
 import utils.flight_fare_predictor as predictor
 import utils.sentiment as sentiment
+import utils.landmark_detection as ld
 import warnings
 import pandas as pd
 warnings.filterwarnings('ignore')
 
 app = Flask(__name__)
+
+app.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg'])
+app.config['UPLOAD_FOLDER'] = 'uploads/'
+app.config['DOWNLOAD_FOLDER'] = 'static/output/landmark_detection/downloads/'
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
 
 @app.route('/')
@@ -129,9 +141,17 @@ def download_excel_topic():
 @cross_origin()
 def landmark_detection():
     if request.method == 'POST':
-        pass
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            processed_image = ld.detect_landmark(image=file, filename=filename)
+            return render_template('landmark-detection.html',
+                                    label=ld.detect_landmark.label.replace('_', ' '),
+                                    processed_image=processed_image)
     else:
         return render_template('landmark-detection.html')
+
 
 @app.errorhandler(404)
 @cross_origin()
