@@ -223,7 +223,7 @@ def scraping_tweets_with_any_topic(topic):
         + topic + '_' + timestamp + '.xlsx'
 
     scraping_tweets_with_any_topic.df = df.to_html(
-        index=False, classes='table table-hover')
+        index=False, classes='table table-hover dataTable')
     return scraping_tweets_with_any_topic.df
 
 
@@ -268,7 +268,7 @@ def scraping_tweets_from_user_account(username):
     scraping_tweets_from_user_account.path_excel = 'static/output/sentiment_analysis/excel/' \
          + username + '_' + timestamp + '.xlsx'
 
-    df = df.to_html(index=False, classes='table table-hover')
+    df = df.to_html(index=False, classes='table table-hover dataTable')
     
     return df
 

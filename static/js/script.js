@@ -86,3 +86,11 @@ $(document).ready(function () {
     }, 60000);
   });
 });
+
+$(document).ready(function () {
+  $(".dataTable").DataTable(
+    {
+      dom: "Bfrtip",
+    }
+  );
+});

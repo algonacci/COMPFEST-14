@@ -61,16 +61,22 @@
             </div>
             {% endif %}
 
-            
+            {% if table %}
+            <div class="card">
+                <div class="card-header text-center">Data Tweets</div>
+                <div class="card-body">
+                    <div class="table-responsive-sm p-3">
 
-            <div class="table-responsive-sm p-3">
-
-                {% if no_topic %}
-                <h3>{{ no_topic }}</h3>
-                {% endif %}
-
-                {{ table | safe }}
+                        {% if no_topic %}
+                        <h3>{{ no_topic }}</h3>
+                        {% endif %}
+        
+                        {{ table | safe }}
+                    </div>
+                </div>
             </div>
+            {% endif %}
+
         </div>
     </div>
 
