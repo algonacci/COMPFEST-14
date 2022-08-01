@@ -123,6 +123,22 @@ def user_sentiment_analysis():
         return render_template('user-sentiment-analysis.html')
 
 
+@app.route('/sentiment-analysis/news', methods=['GET', 'POST'])
+@cross_origin()
+def news_sentiment_analysis():
+    if request.method == 'POST':
+        news = request.form['news']
+        print(news)
+        if news:
+            table = sentiment.scraping_tweets_from_news(news_headline=news)
+            return render_template('news-sentiment-analysis.html',
+                                    table=table, text='{}'.format(news))
+        else:
+            return render_template('news-sentiment-analysis.html', no_news="Please enter a news")
+    else:
+        return render_template('news-sentiment-analysis.html')
+
+
 @app.route('/download_excel_user')
 @cross_origin()
 def download_excel_user():

@@ -1,0 +1,29 @@
+<html>
+
+    <!-- input an text -->
+    <form id="#formNews" action="/sentiment-analysis/news" method="POST">
+        <div class="row justify-content-center text-center p-5">
+            <div class="col-lg-10">
+                <div class="input-group mb-3">
+                    <input type="text" name="news" class="form-control"
+                        placeholder="Danau Toba, MotoGP Mandalika, or something else">
+                </div>
+                <div class="row justify-content-center text-center">
+                    <div class="col-lg-6 mt-3 mb-3">
+                        <input class="btn button mt-3" type="submit" value="Search" id="submitFormNews">
+                    </div>
+                </div>            
+            </div>
+        </div>
+    </form>
+
+    {% if text %}
+        <h3 class="p-3">Result for {{ text }}</h3>
+    {% endif %}
+
+    {% if table %}
+        {{ table | safe }}
+    {% endif %}
+
+
+</html>

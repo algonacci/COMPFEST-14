@@ -71,6 +71,22 @@ $(document).ready(function () {
   });
 });
 
+$(document).ready(function () {
+  $("#submitFormNews").click(function () {
+    $(this).addClass("loader");
+
+    setTimeout(function () {
+      $("#submitFormNews").removeClass("loader");
+    }, 60000);
+
+    $.ajax({
+      url: "/sentiment-analysis/news",
+      type: "POST",
+      data: $("#formNews").serialize(),
+    });
+  });
+});
+
 // Upload image and show preview
 var loadFile = function (event) {
   var output = document.getElementById("output");
@@ -88,9 +104,7 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-  $(".dataTable").DataTable(
-    {
-      dom: "Bfrtip",
-    }
-  );
+  $(".dataTable").DataTable({
+    dom: "Bfrtip",
+  });
 });

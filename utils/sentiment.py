@@ -1,3 +1,6 @@
+from pygooglenews import GoogleNews
+import warnings
+import numpy as np
 import time
 import re
 from bs4 import BeautifulSoup
@@ -15,8 +18,6 @@ from nltk.tokenize import WordPunctTokenizer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 nltk.download('punkt')
-import numpy as np
-import warnings
 warnings.filterwarnings('ignore')
 
 plt.rcParams.update({
@@ -38,6 +39,8 @@ config = dotenv_values(".env")
 
 consumer_key = config["consumer_key"]
 consumer_key_secret = config["consumer_key_secret"]
+
+CLOUD_STORAGE_BUCKET = config["CLOUD_STORAGE_BUCKET"]
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_key_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True)
@@ -263,13 +266,14 @@ def scraping_tweets_from_user_account(username):
     df_for_excel = df.copy()
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     scraping_tweets_from_user_account.df_excel = df_for_excel.to_excel(
-        'static/output/sentiment_analysis/excel/' + username + '_' + timestamp + '.xlsx',
+        'static/output/sentiment_analysis/excel/' +
+        username + '_' + timestamp + '.xlsx',
         index=False)
     scraping_tweets_from_user_account.path_excel = 'static/output/sentiment_analysis/excel/' \
-         + username + '_' + timestamp + '.xlsx'
+        + username + '_' + timestamp + '.xlsx'
 
     df = df.to_html(index=False, classes='table table-hover dataTable')
-    
+
     return df
 
 
@@ -292,7 +296,7 @@ def visualize_word_embedding(data, topic):
     args = (-values).argsort()
     values = vectors[args]
     vectors = vectors[:, args]
-    new_vectors = vectors[:,:2]
+    new_vectors = vectors[:, :2]
     new_X = np.dot(X, new_vectors)
 
     plt.figure(figsize=(15, 10), facecolor='k')
@@ -300,6 +304,43 @@ def visualize_word_embedding(data, topic):
     plt.axis('off')
     vocab = list(model.wv.vocab)
     for i, word in enumerate(vocab):
-        plt.annotate(word, xy=(new_X[i,0] ,new_X[i,1]))
+        plt.annotate(word, xy=(new_X[i, 0], new_X[i, 1]))
     plt.savefig(fname='static/output/sentiment_analysis/word_embedding/' +
                 visualize_word_embedding.word_embedding_filename + '.png')
+
+
+def scraping_tweets_from_news(news_headline):
+    gn = GoogleNews(lang='id', country='id')
+    news = gn.search(news_headline)
+    news_item = news['entries']
+
+    for i in news_item:
+        i['title'] = re.sub('-.*', '', i['title'])
+        i['title'] = re.sub('[^a-zA-Z0-9 ]', '', i['title'])
+        i['title'] = re.sub('com', '', i['title'])
+        print(i['title'])
+        print(i['link'])
+        print('\n')
+
+    cleaned_text = []
+
+    for i in news_item:
+        cleaned_text.append(tweet_cleaner(i['title']))
+
+    predicted_label, confidence = analyze_sentiment(cleaned_text)
+
+    temporary_df = pd.DataFrame({
+        'sentiment': le.fit_transform(predicted_label),
+    })
+
+    df = pd.DataFrame({
+        'title': [i['title'] for i in news_item],
+        'link': [i['link'] for i in news_item],
+        "Sentiment": temporary_df['sentiment'].apply(get_analysis),
+        "Confidence": confidence
+    })
+
+    scraping_tweets_from_news.df = df.to_html(
+        index=False, classes='table table-hover dataTable')
+
+    return scraping_tweets_from_news.df
