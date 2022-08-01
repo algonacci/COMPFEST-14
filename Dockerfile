@@ -1,11 +1,11 @@
 FROM python:3.10
 
+ENV PYTHONUNBUFFERED True
+
 WORKDIR /app
 
-COPY . .
+COPY . ./
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT [ "python" ]
-
-CMD ["app.py"]
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app
