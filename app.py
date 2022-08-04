@@ -72,9 +72,7 @@ def topic_sentiment_analysis():
         if topic:
             table = sentiment.scraping_tweets_with_any_topic(topic=topic)
             cleaned_tweet = sentiment.scraping_tweets_with_any_topic.data_tweet
-            sentiment.visualize_wordcloud(data=cleaned_tweet, topic=topic)
-            wordcloud_plot = '../static/output/sentiment_analysis/topic/' + \
-                sentiment.visualize_wordcloud.wordcloud_visualization_filename
+            wordcloud = sentiment.visualize_wordcloud(data=cleaned_tweet, topic=topic)
             sentiment.visualize_sentiment_countplot(topic=topic)
             sentiment_countplot = '../static/output/sentiment_analysis/topic_sentiment/' + \
                 sentiment.visualize_sentiment_countplot.sentiment_countplot_filename
@@ -83,7 +81,7 @@ def topic_sentiment_analysis():
                 sentiment.visualize_word_embedding.word_embedding_filename
             return render_template('topic-sentiment-analysis.html',
                                    table=table, text='{}'.format(topic),
-                                   wordcloud_plot=wordcloud_plot,
+                                   wordcloud_plot=wordcloud,
                                    sentiment_countplot=sentiment_countplot,
                                    word_embedding=word_embedding)
         else:

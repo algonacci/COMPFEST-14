@@ -19,6 +19,8 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 nltk.download('punkt')
 warnings.filterwarnings('ignore')
+from google.cloud import storage
+from google.oauth2 import service_account
 
 plt.rcParams.update({
     "lines.color": "white",
@@ -41,6 +43,7 @@ consumer_key = config["consumer_key"]
 consumer_key_secret = config["consumer_key_secret"]
 
 CLOUD_STORAGE_BUCKET = config["CLOUD_STORAGE_BUCKET"]
+credentials = service_account.Credentials.from_service_account_file("travens-compfest.json")
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_key_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True)
@@ -126,6 +129,14 @@ def visualize_wordcloud(data, topic):
     plt.axis("off")
     plt.savefig(fname='static/output/sentiment_analysis/topic/' +
                 visualize_wordcloud.wordcloud_visualization_filename + '.png')
+    plot = 'static/output/sentiment_analysis/topic/' + \
+                visualize_wordcloud.wordcloud_visualization_filename + '.png'
+    gcs = storage.Client(credentials=credentials)
+    bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
+    blob = bucket.blob(plot)
+    blob.upload_from_filename(plot, content_type='image/png')
+    blob.make_public()
+    return blob.public_url
                 
 def visualize_wordcloud_news(data, news):
     timestamp = time.strftime("%Y%m%d-%H%M%S")

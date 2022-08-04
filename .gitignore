@@ -5,7 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
-
+travens-compfest.json
 # Distribution / packaging
 .Python
 build/
