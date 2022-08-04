@@ -126,11 +126,26 @@ def visualize_wordcloud(data, topic):
     plt.axis("off")
     plt.savefig(fname='static/output/sentiment_analysis/topic/' +
                 visualize_wordcloud.wordcloud_visualization_filename + '.png')
+                
+def visualize_wordcloud_news(data, news):
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    visualize_wordcloud_news.wordcloud_visualization_filename = 'News_' + news + '_' + timestamp
+    text = str(data).replace("'", "")
+    wordcloud = WordCloud(width=3000, height=2000,
+                          font_path='C:\\Users\\Client\\Documents\\GitHub\\COMPFEST-14\\static\\font\\PlusJakartaSans-Regular.ttf',
+                          max_words=200, colormap='Set3',
+                          background_color="black",
+                          stopwords=stop_words).generate(text)
+    plt.figure(figsize=(15, 10), facecolor='k')
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis("off")
+    plt.savefig(fname='static/output/sentiment_analysis/news/' +
+                visualize_wordcloud_news.wordcloud_visualization_filename + '.png')
 
 
 def visualize_wordcloud_username(data, username):
     timestamp = time.strftime("%Y%m%d-%H%M%S")
-    visualize_wordcloud.wordcloud_visualization_filename = 'Username_' + \
+    visualize_wordcloud_username.wordcloud_visualization_filename = 'Username_' + \
         username + '_' + timestamp
     text = str(data).replace("'", "")
     wordcloud = WordCloud(width=3000, height=2000,
@@ -142,7 +157,7 @@ def visualize_wordcloud_username(data, username):
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")
     plt.savefig(fname='static/output/sentiment_analysis/username/' +
-                visualize_wordcloud.wordcloud_visualization_filename + '.png')
+                visualize_wordcloud_username.wordcloud_visualization_filename + '.png')
 
 
 def visualize_sentiment_countplot(topic):
@@ -178,6 +193,23 @@ def visualize_sentiment_countplot_username(username):
 
     plt.savefig(fname='static/output/sentiment_analysis/user_sentiment/' +
                 visualize_sentiment_countplot_username.sentiment_countplot_filename + '.png')
+
+def visualize_sentiment_countplot_news(news):
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    visualize_sentiment_countplot_news.sentiment_countplot_filename = 'Sentiment_news_' \
+        + news + '_' + timestamp
+    plt.figure(figsize=(15, 10), facecolor='k')
+    plt.title('Sentiment Analysis from {}'.format(
+        news), fontsize=40, pad=20)
+    plt.xlabel('Sentiment', fontsize=30, labelpad=20)
+    plt.ylabel('Count', fontsize=30, labelpad=20)
+
+    # make a count plot using matplotlib
+    sns.countplot(x=scraping_from_news.data_headline_sentiment,
+                  data=scraping_from_news.data_headline_sentiment)
+
+    plt.savefig(fname='static/output/sentiment_analysis/news/' +
+                visualize_sentiment_countplot_news.sentiment_countplot_filename + '.png')
 
 
 def scraping_tweets_with_any_topic(topic):
@@ -309,7 +341,7 @@ def visualize_word_embedding(data, topic):
                 visualize_word_embedding.word_embedding_filename + '.png')
 
 
-def scraping_tweets_from_news(news_headline):
+def scraping_from_news(news_headline):
     gn = GoogleNews(lang='id', country='id')
     news = gn.search(news_headline)
     news_item = news['entries']
@@ -340,7 +372,18 @@ def scraping_tweets_from_news(news_headline):
         "Confidence": confidence
     })
 
-    scraping_tweets_from_news.df = df.to_html(
+    scraping_from_news.data_headline_news = df['title']
+    scraping_from_news.data_headline_sentiment = df['Sentiment']
+
+    df_for_excel = df.copy()
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    scraping_from_news.df_excel = df_for_excel.to_excel('static/output/sentiment_analysis/excel/' + 
+        news_headline + '_' + timestamp + '.xlsx',
+        index=False)
+    scraping_from_news.path_excel = 'static/output/sentiment_analysis/excel/' \
+        + news_headline + '_' + timestamp + '.xlsx'
+
+    scraping_from_news.df = df.to_html(
         index=False, classes='table table-hover dataTable')
 
-    return scraping_tweets_from_news.df
+    return scraping_from_news.df

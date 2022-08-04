@@ -1,29 +1,88 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
-    <!-- input an text -->
-    <form id="#formNews" action="/sentiment-analysis/news" method="POST">
-        <div class="row justify-content-center text-center p-5">
-            <div class="col-lg-10">
-                <div class="input-group mb-3">
-                    <input type="text" name="news" class="form-control"
-                        placeholder="Danau Toba, MotoGP Mandalika, or something else">
-                </div>
-                <div class="row justify-content-center text-center">
-                    <div class="col-lg-6 mt-3 mb-3">
-                        <input class="btn button mt-3" type="submit" value="Search" id="submitFormNews">
+{% include 'includes/head.html' %}
+
+<body>
+    {% include 'includes/navbar.html' %}
+
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8 p-3">
+                <img src="/static/img/news.png" alt="News-Headline" width="100">
+                <h3>News Headline</h3>
+                <p>Search any topic or hot issue related to tourism that happening right now and analyze the public
+                    sentiment.</p>
+
+                <form id="#formNews" action="/sentiment-analysis/news" method="POST">
+                    <div class="row justify-content-center text-center p-5">
+                        <div class="col-lg-10">
+                            <div class="input-group mb-3">
+                                <input type="text" name="news" class="form-control"
+                                    placeholder="Danau Toba, MotoGP Mandalika, or something else">
+                            </div>
+                            <div class="row justify-content-center text-center">
+                                <div class="col-lg-6 mt-3 mb-3">
+                                    <input class="btn button mt-3" type="submit" value="Search" id="submitFormNews">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>            
+                </form>
+
             </div>
+
+            {% if text %}
+            <h3 class="p-3">Result for {{ text }}</h3>
+            {% endif %}
+
+            {% if wordcloud_plot %}
+            <div class="col-sm-6 py-3">
+                <img src="{{ wordcloud_plot }}.png" id="wordcloud" alt="WordCloud">
+            </div>
+            {% endif %}
+
+            {% if sentiment_countplot %}
+            <div class="col-sm-6 py-3">
+                <img src="{{ sentiment_countplot }}.png" id="wordcloud" alt="Sentiment-Countplot">
+            </div>
+            {% endif %}
+
+            {% if word_embedding %}
+            <div class="col-sm-6 py-3">
+                <img src="{{ word_embedding }}.png" id="wordcloud" alt="Sentiment-Countplot">
+            </div>
+
+            <div class="col-lg-8 mt-3 mb-3">
+                <a class="btn btn-success" href="/download_excel_news">
+                    <i class="bi bi-file-earmark-spreadsheet-fill"></i>
+                    Download Excel
+                </a>
+            </div>
+            {% endif %}
+
+            {% if table %}
+            <div class="card">
+                <div class="card-header text-center">News Headline Data</div>
+                <div class="card-body">
+                    <div class="table-responsive-sm p-3">
+
+                        {% if no_topic %}
+                        <h3>{{ no_topic }}</h3>
+                        {% endif %}
+
+                        {{ table | safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
         </div>
-    </form>
+    </div>
 
-    {% if text %}
-        <h3 class="p-3">Result for {{ text }}</h3>
-    {% endif %}
+    {% include 'includes/footer.html' %}
 
-    {% if table %}
-        {{ table | safe }}
-    {% endif %}
-
+    {% include 'includes/scripts.html' %}
+</body>
 
 </html>

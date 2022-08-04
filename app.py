@@ -104,7 +104,7 @@ def user_sentiment_analysis():
             sentiment.visualize_wordcloud_username(
                 data=cleaned_tweet, username=username)
             wordcloud_plot = '../static/output/sentiment_analysis/username/' + \
-                sentiment.visualize_wordcloud.wordcloud_visualization_filename
+                sentiment.visualize_wordcloud_username.wordcloud_visualization_filename
             sentiment.visualize_sentiment_countplot_username(username=username)
             sentiment_countplot = '../static/output/sentiment_analysis/user_sentiment/' + \
                 sentiment.visualize_sentiment_countplot_username.sentiment_countplot_filename
@@ -130,9 +130,23 @@ def news_sentiment_analysis():
         news = request.form['news']
         print(news)
         if news:
-            table = sentiment.scraping_tweets_from_news(news_headline=news)
+            table = sentiment.scraping_from_news(news_headline=news)
+            cleaned_headline_news = sentiment.scraping_from_news.data_headline_news
+            sentiment.visualize_wordcloud_news(data=cleaned_headline_news, news=news)
+            wordcloud_plot = '../static/output/sentiment_analysis/news/' + \
+                sentiment.visualize_wordcloud_news.wordcloud_visualization_filename
+            sentiment.visualize_sentiment_countplot_news(news=news)
+            sentiment_countplot = '../static/output/sentiment_analysis/news/' + \
+                sentiment.visualize_sentiment_countplot_news.sentiment_countplot_filename
+            sentiment.visualize_word_embedding(
+                data=cleaned_headline_news, topic=news)
+            word_embedding = '../static/output/sentiment_analysis/word_embedding/' + \
+                sentiment.visualize_word_embedding.word_embedding_filename
             return render_template('news-sentiment-analysis.html',
-                                    table=table, text='{}'.format(news))
+                                    table=table, text='{}'.format(news),
+                                    wordcloud_plot=wordcloud_plot,
+                                    sentiment_countplot=sentiment_countplot,
+                                    word_embedding=word_embedding)
         else:
             return render_template('news-sentiment-analysis.html', no_news="Please enter a news")
     else:
@@ -150,6 +164,12 @@ def download_excel_user():
 @cross_origin()
 def download_excel_topic():
     excel = sentiment.scraping_tweets_with_any_topic.path_excel
+    return send_file(excel, as_attachment=True)
+
+@app.route('/download_excel_news')
+@cross_origin()
+def download_excel_news():
+    excel = sentiment.scraping_from_news.path_excel
     return send_file(excel, as_attachment=True)
 
 
