@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, redirect
 from flask_cors import cross_origin
 from werkzeug.utils import secure_filename
 import locale
@@ -13,7 +13,7 @@ warnings.filterwarnings('ignore')
 app = Flask(__name__)
 
 app.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg'])
-app.config['UPLOAD_FOLDER'] = 'uploads/'
+app.config['UPLOAD_FOLDER'] = 'upload_landmark/'
 app.config['DOWNLOAD_FOLDER'] = 'static/output/landmark_detection/downloads/'
 
 
@@ -73,12 +73,8 @@ def topic_sentiment_analysis():
             table = sentiment.scraping_tweets_with_any_topic(topic=topic)
             cleaned_tweet = sentiment.scraping_tweets_with_any_topic.data_tweet
             wordcloud = sentiment.visualize_wordcloud(data=cleaned_tweet, topic=topic)
-            sentiment.visualize_sentiment_countplot(topic=topic)
-            sentiment_countplot = '../static/output/sentiment_analysis/topic_sentiment/' + \
-                sentiment.visualize_sentiment_countplot.sentiment_countplot_filename
-            sentiment.visualize_word_embedding(data=cleaned_tweet, topic=topic)
-            word_embedding = '../static/output/sentiment_analysis/word_embedding/' + \
-                sentiment.visualize_word_embedding.word_embedding_filename
+            sentiment_countplot = sentiment.visualize_sentiment_countplot(topic=topic)
+            word_embedding = sentiment.visualize_word_embedding(data=cleaned_tweet, topic=topic)
             return render_template('topic-sentiment-analysis.html',
                                    table=table, text='{}'.format(topic),
                                    wordcloud_plot=wordcloud,
@@ -99,20 +95,12 @@ def user_sentiment_analysis():
             table = sentiment.scraping_tweets_from_user_account(
                 username=username)
             cleaned_tweet = sentiment.scraping_tweets_from_user_account.data_tweet
-            sentiment.visualize_wordcloud_username(
-                data=cleaned_tweet, username=username)
-            wordcloud_plot = '../static/output/sentiment_analysis/username/' + \
-                sentiment.visualize_wordcloud_username.wordcloud_visualization_filename
-            sentiment.visualize_sentiment_countplot_username(username=username)
-            sentiment_countplot = '../static/output/sentiment_analysis/user_sentiment/' + \
-                sentiment.visualize_sentiment_countplot_username.sentiment_countplot_filename
-            sentiment.visualize_word_embedding(
-                data=cleaned_tweet, topic=username)
-            word_embedding = '../static/output/sentiment_analysis/word_embedding/' + \
-                sentiment.visualize_word_embedding.word_embedding_filename
+            wordcloud = sentiment.visualize_wordcloud_username(data=cleaned_tweet, username=username)
+            sentiment_countplot = sentiment.visualize_sentiment_countplot_username(username=username)
+            word_embedding = sentiment.visualize_word_embedding(data=cleaned_tweet, topic=username)
             return render_template('user-sentiment-analysis.html',
                                    table=table, text='{}'.format(username),
-                                   wordcloud_plot=wordcloud_plot,
+                                   wordcloud_plot=wordcloud,
                                    sentiment_countplot=sentiment_countplot,
                                    word_embedding=word_embedding)
         else:
@@ -130,19 +118,12 @@ def news_sentiment_analysis():
         if news:
             table = sentiment.scraping_from_news(news_headline=news)
             cleaned_headline_news = sentiment.scraping_from_news.data_headline_news
-            sentiment.visualize_wordcloud_news(data=cleaned_headline_news, news=news)
-            wordcloud_plot = '../static/output/sentiment_analysis/news/' + \
-                sentiment.visualize_wordcloud_news.wordcloud_visualization_filename
-            sentiment.visualize_sentiment_countplot_news(news=news)
-            sentiment_countplot = '../static/output/sentiment_analysis/news/' + \
-                sentiment.visualize_sentiment_countplot_news.sentiment_countplot_filename
-            sentiment.visualize_word_embedding(
-                data=cleaned_headline_news, topic=news)
-            word_embedding = '../static/output/sentiment_analysis/word_embedding/' + \
-                sentiment.visualize_word_embedding.word_embedding_filename
+            wordcloud = sentiment.visualize_wordcloud_news(data=cleaned_headline_news, news=news)
+            sentiment_countplot = sentiment.visualize_sentiment_countplot_news(news=news)
+            word_embedding = sentiment.visualize_word_embedding(data=cleaned_headline_news, topic=news)
             return render_template('news-sentiment-analysis.html',
                                     table=table, text='{}'.format(news),
-                                    wordcloud_plot=wordcloud_plot,
+                                    wordcloud_plot=wordcloud,
                                     sentiment_countplot=sentiment_countplot,
                                     word_embedding=word_embedding)
         else:
@@ -154,21 +135,21 @@ def news_sentiment_analysis():
 @app.route('/download_excel_user')
 @cross_origin()
 def download_excel_user():
-    excel = sentiment.scraping_tweets_from_user_account.path_excel
-    return send_file(excel, as_attachment=True)
+    excel = sentiment.scraping_tweets_from_user_account.url_excel
+    return redirect(excel)
 
 
 @app.route('/download_excel_topic')
 @cross_origin()
 def download_excel_topic():
-    excel = sentiment.scraping_tweets_with_any_topic.path_excel
-    return send_file(excel, as_attachment=True)
+    excel = sentiment.scraping_tweets_with_any_topic.url_excel
+    return redirect(excel)
 
 @app.route('/download_excel_news')
 @cross_origin()
 def download_excel_news():
-    excel = sentiment.scraping_from_news.path_excel
-    return send_file(excel, as_attachment=True)
+    excel = sentiment.scraping_from_news.url_excel
+    return redirect(excel)
 
 
 @app.route('/landmark-detection', methods=['GET', 'POST'])

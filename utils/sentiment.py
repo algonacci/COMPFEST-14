@@ -127,9 +127,9 @@ def visualize_wordcloud(data, topic):
     plt.figure(figsize=(15, 10), facecolor='k')
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")
-    plt.savefig(fname='static/output/sentiment_analysis/topic/' +
+    plt.savefig(fname='output_sentiment_analysis/topic/' +
                 visualize_wordcloud.wordcloud_visualization_filename + '.png')
-    plot = 'static/output/sentiment_analysis/topic/' + \
+    plot = 'output_sentiment_analysis/topic/' + \
                 visualize_wordcloud.wordcloud_visualization_filename + '.png'
     gcs = storage.Client(credentials=credentials)
     bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
@@ -150,8 +150,16 @@ def visualize_wordcloud_news(data, news):
     plt.figure(figsize=(15, 10), facecolor='k')
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")
-    plt.savefig(fname='static/output/sentiment_analysis/news/' +
+    plt.savefig(fname='output_sentiment_analysis/news/' +
                 visualize_wordcloud_news.wordcloud_visualization_filename + '.png')
+    plot = 'output_sentiment_analysis/news/' + \
+                visualize_wordcloud_news.wordcloud_visualization_filename + '.png'
+    gcs = storage.Client(credentials=credentials)
+    bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
+    blob = bucket.blob(plot)
+    blob.upload_from_filename(plot, content_type='image/png')
+    blob.make_public()
+    return blob.public_url
 
 
 def visualize_wordcloud_username(data, username):
@@ -167,8 +175,16 @@ def visualize_wordcloud_username(data, username):
     plt.figure(figsize=(15, 10), facecolor='k')
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")
-    plt.savefig(fname='static/output/sentiment_analysis/username/' +
+    plt.savefig(fname='output_sentiment_analysis/username/' +
                 visualize_wordcloud_username.wordcloud_visualization_filename + '.png')
+    plot = 'output_sentiment_analysis/username/' + \
+                visualize_wordcloud_username.wordcloud_visualization_filename + '.png'
+    gcs = storage.Client(credentials=credentials)
+    bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
+    blob = bucket.blob(plot)
+    blob.upload_from_filename(plot, content_type='image/png')
+    blob.make_public()
+    return blob.public_url
 
 
 def visualize_sentiment_countplot(topic):
@@ -184,8 +200,16 @@ def visualize_sentiment_countplot(topic):
     sns.countplot(x=scraping_tweets_with_any_topic.sentiment,
                   data=scraping_tweets_with_any_topic.sentiment)
 
-    plt.savefig(fname='static/output/sentiment_analysis/topic_sentiment/' +
+    plt.savefig(fname='output_sentiment_analysis/topic_sentiment/' +
                 visualize_sentiment_countplot.sentiment_countplot_filename + '.png')
+    plot = 'output_sentiment_analysis/topic_sentiment/' + \
+                visualize_sentiment_countplot.sentiment_countplot_filename + '.png'
+    gcs = storage.Client(credentials=credentials)
+    bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
+    blob = bucket.blob(plot)
+    blob.upload_from_filename(plot, content_type='image/png')
+    blob.make_public()
+    return blob.public_url
 
 
 def visualize_sentiment_countplot_username(username):
@@ -202,8 +226,16 @@ def visualize_sentiment_countplot_username(username):
     sns.countplot(x=scraping_tweets_from_user_account.sentiment,
                   data=scraping_tweets_from_user_account.sentiment)
 
-    plt.savefig(fname='static/output/sentiment_analysis/user_sentiment/' +
+    plt.savefig(fname='output_sentiment_analysis/user_sentiment/' +
                 visualize_sentiment_countplot_username.sentiment_countplot_filename + '.png')
+    plot = 'output_sentiment_analysis/user_sentiment/' + \
+                visualize_sentiment_countplot_username.sentiment_countplot_filename + '.png'
+    gcs = storage.Client(credentials=credentials)
+    bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
+    blob = bucket.blob(plot)
+    blob.upload_from_filename(plot, content_type='image/png')
+    blob.make_public()
+    return blob.public_url
 
 def visualize_sentiment_countplot_news(news):
     timestamp = time.strftime("%Y%m%d-%H%M%S")
@@ -219,8 +251,16 @@ def visualize_sentiment_countplot_news(news):
     sns.countplot(x=scraping_from_news.data_headline_sentiment,
                   data=scraping_from_news.data_headline_sentiment)
 
-    plt.savefig(fname='static/output/sentiment_analysis/news/' +
+    plt.savefig(fname='output_sentiment_analysis/news/' +
                 visualize_sentiment_countplot_news.sentiment_countplot_filename + '.png')
+    plot = 'output_sentiment_analysis/news/' + \
+                visualize_sentiment_countplot_news.sentiment_countplot_filename + '.png'
+    gcs = storage.Client(credentials=credentials)
+    bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
+    blob = bucket.blob(plot)
+    blob.upload_from_filename(plot, content_type='image/png')
+    blob.make_public()
+    return blob.public_url
 
 
 def scraping_tweets_with_any_topic(topic):
@@ -262,11 +302,19 @@ def scraping_tweets_with_any_topic(topic):
     df_for_excel = df.copy()
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     scraping_tweets_with_any_topic.df_excel = df_for_excel.to_excel(
-        'static/output/sentiment_analysis/excel/' + topic + '_' + timestamp + '.xlsx',
+        'output_sentiment_analysis/excel/' + topic + '_' + timestamp + '.xlsx',
         index=False
     )
-    scraping_tweets_with_any_topic.path_excel = 'static/output/sentiment_analysis/excel/' \
+    scraping_tweets_with_any_topic.path_excel = 'output_sentiment_analysis/excel/' \
         + topic + '_' + timestamp + '.xlsx'
+
+    gcs = storage.Client(credentials=credentials)
+    bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
+    blob = bucket.blob(scraping_tweets_with_any_topic.path_excel)
+    blob.upload_from_filename(scraping_tweets_with_any_topic.path_excel, 
+                              content_type='application/vnd.ms-excel')
+    blob.make_public()
+    scraping_tweets_with_any_topic.url_excel = blob.public_url
 
     scraping_tweets_with_any_topic.df = df.to_html(
         index=False, classes='table table-hover dataTable')
@@ -309,11 +357,19 @@ def scraping_tweets_from_user_account(username):
     df_for_excel = df.copy()
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     scraping_tweets_from_user_account.df_excel = df_for_excel.to_excel(
-        'static/output/sentiment_analysis/excel/' +
+        'output_sentiment_analysis/excel/' +
         username + '_' + timestamp + '.xlsx',
         index=False)
-    scraping_tweets_from_user_account.path_excel = 'static/output/sentiment_analysis/excel/' \
+    scraping_tweets_from_user_account.path_excel = 'output_sentiment_analysis/excel/' \
         + username + '_' + timestamp + '.xlsx'
+
+    gcs = storage.Client(credentials=credentials)
+    bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
+    blob = bucket.blob(scraping_tweets_from_user_account.path_excel)
+    blob.upload_from_filename(scraping_tweets_from_user_account.path_excel,
+                              content_type='application/vnd.ms-excel')
+    blob.make_public()
+    scraping_tweets_from_user_account.url_excel = blob.public_url
 
     df = df.to_html(index=False, classes='table table-hover dataTable')
 
@@ -348,8 +404,17 @@ def visualize_word_embedding(data, topic):
     vocab = list(model.wv.vocab)
     for i, word in enumerate(vocab):
         plt.annotate(word, xy=(new_X[i, 0], new_X[i, 1]))
-    plt.savefig(fname='static/output/sentiment_analysis/word_embedding/' +
+    plt.savefig(fname='output_sentiment_analysis/word_embedding/' +
                 visualize_word_embedding.word_embedding_filename + '.png')
+    plot = 'output_sentiment_analysis/word_embedding/' + \
+        visualize_word_embedding.word_embedding_filename + '.png'
+    gcs = storage.Client(credentials=credentials)
+    bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
+    blob = bucket.blob(plot)
+    blob.upload_from_filename(plot, content_type='image/png')
+    blob.make_public()
+    return blob.public_url
+    
 
 
 def scraping_from_news(news_headline):
@@ -388,11 +453,19 @@ def scraping_from_news(news_headline):
 
     df_for_excel = df.copy()
     timestamp = time.strftime("%Y%m%d-%H%M%S")
-    scraping_from_news.df_excel = df_for_excel.to_excel('static/output/sentiment_analysis/excel/' + 
+    scraping_from_news.df_excel = df_for_excel.to_excel('output_sentiment_analysis/excel/' + 
         news_headline + '_' + timestamp + '.xlsx',
         index=False)
-    scraping_from_news.path_excel = 'static/output/sentiment_analysis/excel/' \
+    scraping_from_news.path_excel = 'output_sentiment_analysis/excel/' \
         + news_headline + '_' + timestamp + '.xlsx'
+
+    gcs = storage.Client(credentials=credentials)
+    bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
+    blob = bucket.blob(scraping_from_news.path_excel)
+    blob.upload_from_filename(scraping_from_news.path_excel,
+                                content_type='application/vnd.ms-excel')
+    blob.make_public()
+    scraping_from_news.url_excel = blob.public_url
 
     scraping_from_news.df = df.to_html(
         index=False, classes='table table-hover dataTable')

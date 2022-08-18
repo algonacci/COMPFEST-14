@@ -5,6 +5,14 @@ from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as viz_utils
 import sys
 sys.path.append("..")
+from dotenv import dotenv_values
+from google.cloud import storage
+from google.oauth2 import service_account
+
+config = dotenv_values(".env")
+
+CLOUD_STORAGE_BUCKET = config["CLOUD_STORAGE_BUCKET"]
+credentials = service_account.Credentials.from_service_account_file("travens-compfest.json")
 
 LABEL_FILENAME = 'labels/label_map.pbtxt'
 category_index = label_map_util.create_category_index_from_labelmap(
@@ -34,6 +42,11 @@ def load_image_into_numpy_array(image):
 
 
 def detect_landmark(image, filename):
+    uploaded_image_path = 'upload_landmark/' + filename
+    gcs = storage.Client(credentials=credentials)
+    bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
+    blob = bucket.blob(uploaded_image_path)
+    blob.upload_from_filename(uploaded_image_path)
     image_path = Image.open(image)
     image_path = image_path.convert('RGB')
     image_np = load_image_into_numpy_array(image_path)
@@ -63,6 +76,12 @@ def detect_landmark(image, filename):
     print(detect_landmark.label)
     predicted_image = Image.fromarray(
             image_np_with_detections.squeeze())
-    predicted_image.save('static/output/landmark_detection/downloads/' + filename)
-    predicted_image_path = 'static/output/landmark_detection/downloads/' + filename
-    return predicted_image_path
+    predicted_image.save('output_landmark_detection/' + filename)
+    predicted_image_path = 'output_landmark_detection/' + filename
+    gcs = storage.Client(credentials=credentials)
+    bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
+    blob = bucket.blob(predicted_image_path)
+    blob.upload_from_filename(predicted_image_path)
+    blob.make_public()
+    predicted_image_url = blob.public_url
+    return predicted_image_url
